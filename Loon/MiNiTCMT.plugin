@@ -1,0 +1,23 @@
+#!name = 微信小程序去广告
+#!desc = 针对部分小程序广告进行拦(仅自用)
+#!openUrl = 
+#!author = kaze
+#!homepage = https://github.com/Keze7/Kaze/tree/main/Loon
+#!icon = https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/WeixinMiniPrograms.png
+#!date = 2025-4-30 18:33
+
+[Rewrite]
+//同城旅行
+^https:\/\/wx\.17u\.cn\/wxocbdapi\/adService reject-dict
+^https:\/\/wx\.17u\.cn\/wechatmypubapi\/myInfo\/listIcons reject-dict
+^https:\/\/wx\.17u\.cn\/platformpubapi\/card reject-dict
+^https:\/\/wx\.17u\.cn\/homemarketapi\/aggregator reject-dict
+//美团
+^https:\/\/web\.meituan\.com\/api\/miniprogram\/my\/novelZone reject-dict
+^https:\/\/web\.meituan\.com\/api\/miniprogram\/my\/resources reject-dict
+^https:\/\/npay\.meituan\.com\/conch\/flow\/mypage-wallet-info reject-dict
+^https:\/\/web\.meituan\.com\/newUser\/returnMoney\/popWindow reject-dict
+^https:\/\/npay\.meituan\.com\/conch\/walletv3\/wechat-pop-window reject-dict
+
+[Mitm]
+hostname = wx.17u.cn,web.meituan.com,npay.meituan.com
