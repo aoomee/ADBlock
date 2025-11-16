@@ -1,0 +1,70 @@
+#!name = 广告拦截&净化（分类版）
+#!desc = 按APP分类拦截广告，部分需清除缓存或重装生效
+#!author = kaze
+#!homepage = https://github.com/Keze7/Kaze/tree/main/Loon
+#!icon = https://raw.githubusercontent.com/Keze7/Kaze/refs/heads/main/icon/advertise.png
+#!date = 2025-07-28 19:00
+
+[Rewrite]
+### 支付类 ###
+# 支付宝无人售货机广告
+^https:\/\/ilce\.alicdn\.com\/minolta reject-dict
+
+### 学习类 ###
+# 学习通主页广告流
+^https:\/\/home-yd\.chaoxing\.com\/apis\/data\/getAdsRecommend reject-dict
+# 超级课程表更新弹窗&广告
+# ^https?:\/\/qiniu-ad\.super\.cn reject-dict
+# ^https?:\/\/182\.92\.244\.70\/d reject-dict
+# ^http:\/\/120\.55\.151\.61:80\/Base\/WindowConfig\/ reject-dict
+# 到梦空间（开屏/弹窗/主页广告）
+^https?:\/\/image\.5idream\.net\/notification\/activity reject-dict
+^https?:\/\/appdmkj\.5idream\.net\/(v2\/login\/message\/tip|v3\/user\/advertising\/list|appPic\/homepage) reject-dict
+
+### 出行类 ###
+# 花小猪开屏广告/AD
+^https:\/\/common\.hongyibo\.com\.cn\/usercenter request-body-json-jq '.data |= ( .dynamic_menus |= map(select(.title != "借钱" and .title != "学生福利")) | del(.driver_activity) | .tools.item |= map(select(.name != "借钱" and .name != "司机招募")) )'
+^https:\/\/casper-agent\.hongyibo\.com\.cn\/agent\/v3\/feeds reject-dict
+^https:\/\/common\.hongyibo\.com\.cn\/usercenter reject-dict
+# ^https:\/\/img-ys011\.didistatic\.com\/static\/ad_oss reject-dict
+^https:\/\/res-new\.hongyibo\.com\.cn\/resapi reject-dict
+# 掌上公交广告
+^https?:\/\/images\.pinduoduo\.com\/marketing_api reject-dict
+^https:\/\/p2-lm\.adukwai\.com\/bs2\/adUnionVideo reject-dict
+# 石慧行广告
+^https:\/\/api\.bwton\.com\/(bas\/ad|bas\/tweets\/v1) reject-dict
+# 亿通行广告
+^https:\/\/api\.ruubypay\.com\/(Advert\/gain|appSide) reject-dict
+
+### 生活类 ###
+# 一刻相册
+^https:\/\/pan\.baidu\.com\/act\/api\/conf reject-dict
+^https:\/\/staticsns\.cdn\.bcebos\.com\/amis reject-dict
+^https:\/\/pan\.baidu\.com\/youai\/material\/v1\/getbynavid reject-dict
+# 中国联通
+^https:\/\/m\.client\.10010\.com\/mobileserviceNine\/api\/v1\/index reject-dict
+^https:\/\/m\.client\.10010\.com\/clientMyPage\/v1\/api\/myWallet reject-dict
+^https:\/\/m\.client\.10010\.com\/clientMyPage\/v1\/api\/getDeviceInfo reject-dict
+^https:\/\/m\.client\.10010\.com\/clientMyPage\/v1\/api\/myRecommend reject-dict
+^https:\/\/m\.client\.10010\.com\/servicetransactbusiness reject-dict
+^https:\/\/m\.client\.10010\.com\/clientIndex reject-dict
+# 美柚广告
+^https:\/\/sc\.seeyouyima\.com\/eimg\/adimg reject-dict
+^https:\/\/ad\.seeyouyima\.com\/v1 reject-dict
+# 阿里云盘弹窗广告
+^https:\/\/log\.mmstat\.com\/m\.gif reject-dict
+# 志愿汇（开屏/弹窗/图标广告）
+# ^https:\/\/apiipv6\.zyh365\.com\/api\/modulePage reject-dict
+# ^http:\/\/ad\.lovefree\.cc\/getAd reject-dict
+# 幸福唐山开屏广告
+^https:\/\/apps\.eshiyun\.info\/advertisement-consumer reject-dict
+
+### 视频/工具类 ###
+# 快影开屏广告
+# ^https:\/\/api\.kmovie\.gifshow\.com\/rest\/n\/kmovie\/app\/resource reject-dict
+# ^https:\/\/api\.kmovie\.gifshow\.com\/rest\/n\/kmovie\/app\/startup\/config\/getByType reject-dict
+# ^https:\/\/api\.kmovie\.gifshow\.com\/rest\/n\/kmovie\/app\/ad reject-dict
+# ^https:\/\/api\.kmovie\.gifshow\.com\/rest\/n\/kmovie\/app\/banner\/common reject-dict
+
+[Mitm]
+hostname = apps.eshiyun.info,appdmkj.5idream.net,ad.lovefree.cc,s3plus.meituan.net,log.mmstat.com,img2.360buyimg.com,120.55.151.61:80,p3-sign.douyinpic.com,p2-lm.adukwai.com,api.ruubypay.com,staticsns.cdn.bcebos.com,image.5idream.net,apiipv6.zyh365.com,sc.seeyouyima.com,ad.seeyouyima.com,api.bwton.com,images.pinduoduo.com,qiniu-ad.super.cn,home-yd.chaoxing.com,ilce.alicdn.com,img-ys011.didistatic.com,157.255.70.30,res-new.hongyibo.com.cn,common.hongyibo.com.cn,2402:4e00:4040:8::4,agent.hongyibo.com.cn,157.255.70.31,2402:4e00:4040:8::1,m.client.10010.com,staticsns.cdn.bcebos.com,pan.baidu.com,api.kmovie.gifshow.com
