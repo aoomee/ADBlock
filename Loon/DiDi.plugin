@@ -1,0 +1,68 @@
+# =========================================================
+# 滴滴出行去广告插件 (for Loon)
+# 整理整合：可莉 + fmz200 + ZenmoFeiShi + ChatGPT 整理增强版
+# 更新时间：2025-11-17
+# 适用：Loon
+# 功能：去除开屏广告、首页横幅、个人中心营销、AI入口、TCP广告端口拦截等
+# =========================================================
+
+
+[General]
+# 建议 MITM 开启持久证书
+skip-proxy = gwp.xiaojukeji.com
+
+
+[MITM]
+hostname = as。xiaojukeji.com, common.diditaxi.com.cn, conf.diditaxi.com.cn, lion.didialift.com, api.udache.com, ct.xiaojukeji.com, res.xiaojukeji.com, hd.xiaojukeji.com, freight.xiaojukeji.com, daijia.kuaidadi.com
+
+
+[Rule]
+# 域名拦截
+DOMAIN，gwp.xiaojukeji.com,REJECT
+
+# ASN 端口封锁（拦截 TCP 广告链路）
+AND,((IP-ASN,45090，no-resolve),(DEST-PORT,25641),(PROTOCOL,TCP)),REJECT
+AND,((IP-ASN,55990，no-resolve),(DEST-PORT,25641),(PROTOCOL,TCP)),REJECT
+AND,((IP-ASN,63646，no-resolve),(DEST-PORT,25641),(PROTOCOL,TCP)),REJECT
+
+# IP 强力拦截（来自 fmz200 / Zenmo）
+IP-CIDR,113.46.225.8/32，REJECT
+IP-CIDR,123.207.209.39/32，REJECT
+IP-CIDR,123.207.209.60/32，REJECT
+IP-CIDR,139.199.240.15/32，REJECT
+IP-CIDR,139.199.240.12/32，REJECT
+IP-CIDR,116.85.3.37/32，REJECT
+IP-CIDR,162.14.157.2/32，REJECT
+IP-CIDR,162.14.157.24/32，REJECT
+IP-CIDR,116.85.1.0/32，REJECT
+IP-CIDR,116.85.1.17/32，REJECT
+IP-CIDR,116.85.1.22/32，REJECT
+IP-CIDR,116.85.3.25/32，REJECT
+
+
+[Rewrite]
+# ---------- 基础拦截 ----------
+^https:\/\/res\.xiaojukeji\.com\/resapi\/activity\/mget reject-dict
+^https:\/\/lion\.didialift\.com\/broker\/\? reject-dict
+^https:\/\/conf\.diditaxi\.com\.cn\/homepage\/v1\/other\/slow\? reject-dict
+^https:\/\/ct\.xiaojukeji\.com\/agent\/v3\/feeds\? reject-dict
+^https:\/\/conf\.diditaxi\.com\.cn\/dynamic\/conf reject-dict
+
+# ---------- JSON 精准净化 ----------
+^https:\/\/conf\.diditaxi\.com\.cn\/homepage\/v1\/core\? response-body-json-jq '.data.disordercards.bottomnavlist.data |= map(select(.id == "homepage" or .id == "user_center")) | .data.order_cards.nav_list_card.data |= map(select(.nav_id != "dacheanycar" and .nav_id != "carmate" and .nav_id != "driverservice" and .nav_id != "zhandianbashi" and .nav_id != "yuancheng" and .nav_id != "pincheche" and .nav_id != "bike" and .nav_id != "special_ride" and .nav_id != "navmorev3"))'
+
+^https:\/\/conf\.diditaxi\.com\.cn\/homepage\/v1\/other\/fast\? response-body-json-del data.disordercards.communicatecard data.disordercards.notloginbottombar data.disordercards.ridingcodecard data.ordercards.carownerwidgetcard data.ordercards.marketingcard data.ordercards.superbannercard data.disordercards.caricon.data.iconinfonew_agreement
+
+^https:\/\/common\.diditaxi\.com\.cn\/common\/v5\/usercenter\/layout\$ response-body-json-del data.instances.centermarketingcard data.instances.centerwidgetlist data.instances.centermembercard
+^https:\/\/common\.diditaxi\.com\.cn\/common\/v5\/usercenter\/layout\$ response-body-json-jq '.data.instances.centerwalletfinancecard.data.viewinfo |= map(select(.title == "优惠卡券" or .title == "余额" or .title == "福利金"))'
+
+^https:\/\/api\.udache\.com\/gulfstream\/porsche\/v1\/dachehomepagelayout\? response-body-json-del data.instances.caricon01.data.iconinfonew_agreement
+
+^https:\/\/as\.xiaojukeji\.com\/ep\/as\/toggles\? response-body-json-jq '.data |= map(if .name|IN("daijiajourneynewtcpswitch","daijiatcpinit","daijiatcpmsgencrypt","daijiatcpsiteinfo","daijiatcpsite_report") then .allow=false else . end)'
+
+
+# ---------- 脚本净化增强 ----------
+# fmz200 去广告核心脚本
+^https?:\/\/(ct|freight|res|conf|common|daijia)\.xiaojukeji\.com\/.* url script-response-body https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/didi/didiAds.js
+# ZenmoFeiShi 微信小程序增强净化
+^https:\/\/(common|conf|api)\.(diditaxi|udache)\.com\.cn.* url script-response-body https://raw.githubusercontent.com/ZenmoFeiShi/Qx/main/Didichuxing.js
