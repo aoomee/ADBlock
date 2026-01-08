@@ -1,0 +1,14 @@
+#!name = qd-metro 小程序去广告
+#!desc = 拦截 qd-metro fourthIndex 推广接口(仅自用)
+#!openUrl =
+#!author = you
+#!homepage =
+#!icon =
+#!date = 2026-01-08
+
+[Rewrite]
+//qd-metro
+^https?:\/\/api\.qd-metro\.com\/ngstatic\/static\/fourthIndex reject-dict
+
+[Mitm]
+hostname = api.qd-metro.com
