@@ -11,8 +11,6 @@
 # 更新弹窗
 ^https:\/\/gw\.xiaocantech\.com\/g\/pa reject-dict
 
-# rpc（Loon 不支持 url-and-header 这种“按 header/方法名”条件匹配，这里只能用 URL 正则尽量匹配）
-^https:\/\/gw\.xiaocantech\.com\/rpc.*(BatchMatchPlacement|WaitClaimedPoints|GetBannerList).* reject-dict
 
 
 [MITM]
