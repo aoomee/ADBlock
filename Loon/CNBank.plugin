@@ -1,0 +1,6 @@
+[MITM] 
+hostname = %APPEND% *.mbs.boc.cn
+
+[Map Local]
+^https?://cdn1.mbs.boc.cn/ubas-mgateway-static/images/advertType/.+.jpg data-type=text data="{}" status-code=200
+^https?://cdn1.mbs.boc.cn/ubas-mgateway-static/images//theme/ data-type=text data="{}" status-code=200
